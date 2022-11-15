@@ -131,5 +131,8 @@ const nuevoPassword = async (req, res) => {
     res.json({ msg: 'Contraseña actualizada correctamente', error: false });
 }
 
+const perfil = async (req, res) => {
+    res.json('Desde perfil');
+}
 
-module.exports = { registrar, autenticar, confirmar, olvidePassword, comprobarToken, nuevoPassword }
+module.exports = { registrar, autenticar, confirmar, olvidePassword, comprobarToken, nuevoPassword, perfil }
