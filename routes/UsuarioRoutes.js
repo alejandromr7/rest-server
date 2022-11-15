@@ -1,8 +1,9 @@
 const { Router } = require('express');
-const { registrar, autenticar } = require('../controllers/UsuarioController');
+const { registrar, autenticar, confirmar } = require('../controllers/UsuarioController');
 const router = Router();
 
 router.post('/', registrar);
 router.post('/login', autenticar);
+router.get('/confirmar/:token', confirmar);
 
 module.exports = router;

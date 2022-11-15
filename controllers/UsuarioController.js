@@ -2,6 +2,7 @@ const db = require("../db/config");
 const bcrypt = require('bcrypt');
 const Usuario = require("../models/Usuario");
 const generarJWT = require("../helpers/generarJWT");
+const { json } = require("sequelize");
 
 
 const registrar = async (req, res) => {
@@ -55,4 +56,25 @@ const autenticar = async (req, res) => {
     });
 }
 
-module.exports = { registrar, autenticar }
+const confirmar = async (req, res) => {
+    const { token } = req.params;
+
+    const usuario = await Usuario.findOne({ where: { token } });
+
+    if (!usuario) {
+        const error = new Error('Token no válido!');
+        return res.status(403).json({ msg: error.message, error: true });
+    }
+
+    try {
+        usuario.confirmar = true;
+        usuario.token = '';
+        await usuario.save();
+        res.json({ msg: 'Usuario confirmado correctamente', error: false });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+module.exports = { registrar, autenticar, confirmar }
