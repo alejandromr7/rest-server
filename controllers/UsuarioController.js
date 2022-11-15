@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const Usuario = require("../models/Usuario");
 const generarJWT = require("../helpers/generarJWT");
 const { json } = require("sequelize");
+const generarId = require("../helpers/generarId");
 
 
 const registrar = async (req, res) => {
@@ -77,4 +78,39 @@ const confirmar = async (req, res) => {
 }
 
 
-module.exports = { registrar, autenticar, confirmar }
+const olvidePassword = async (req, res) => {
+    const { email } = req.body;
+
+    // Comprobar si el usuar existe //
+    const usuario = await Usuario.findOne({ where: { email } });
+
+    if (!usuario) {
+        const error = new Error('No hay coincidencias para este usuario !');
+        return res.status(404).json({ msg: error.message, error: true });
+    }
+
+    try {
+        usuario.token = generarId();
+        await usuario.save();
+        res.json({ msg: 'Hemos enviado un email con las instrucciones', error: false });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const comprobarToken = async (req, res) => {
+    const { token } = req.params;
+
+    const tokenValido = await Usuario.findOne({ where: { token } });
+
+    if (!tokenValido) {
+        const error = new Error('Token no válido!');
+        return res.status(403).json({ msg: error.message, error: true });
+    }
+
+    res.json({ msg: 'Token válido', error: false });
+
+}
+
+module.exports = { registrar, autenticar, confirmar, olvidePassword, comprobarToken }
