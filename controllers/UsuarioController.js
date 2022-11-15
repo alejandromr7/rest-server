@@ -4,6 +4,7 @@ const Usuario = require("../models/Usuario");
 const generarJWT = require("../helpers/generarJWT");
 const { json } = require("sequelize");
 const generarId = require("../helpers/generarId");
+const encryptarPassword = require("../helpers/hashearPassword");
 
 
 const registrar = async (req, res) => {
@@ -113,4 +114,22 @@ const comprobarToken = async (req, res) => {
 
 }
 
-module.exports = { registrar, autenticar, confirmar, olvidePassword, comprobarToken }
+const nuevoPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const usuario = await Usuario.findOne({ where: { token } });
+
+    if (!usuario) {
+        const error = new Error('Token no válido!');
+        return res.status(403).json({ msg: error.message, error: true });
+    }
+
+    usuario.password = encryptarPassword(password);
+    usuario.token = '';
+    await usuario.save();
+    res.json({ msg: 'Contraseña actualizada correctamente', error: false });
+}
+
+
+module.exports = { registrar, autenticar, confirmar, olvidePassword, comprobarToken, nuevoPassword }
