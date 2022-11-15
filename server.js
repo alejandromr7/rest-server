@@ -16,6 +16,7 @@ class Server {
 
     async dbConnection() {
         try {
+            require('./models/Usuario');
             await db.sync();
             console.log('Connection has been established successfully.');
         } catch (error) {
@@ -30,12 +31,12 @@ class Server {
     }
 
     routes() {
-        this.app.use('/api', require('./routes/UsuarioRoutes'));
+        this.app.use('/api/usuarios', require('./routes/UsuarioRoutes'));
     }
 
     listen() {
         this.app.listen(this.port, () => {
-            console.log(`http://${this.host}:${this.port}`);
+            console.log(`http://${this.host}:${this.port}/api`);
         });
     }
 
