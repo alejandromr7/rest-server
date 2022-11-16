@@ -132,7 +132,8 @@ const nuevoPassword = async (req, res) => {
 }
 
 const perfil = async (req, res) => {
-    res.json('Desde perfil');
+    const { usuario } = req;
+    res.json(usuario);
 }
 
 module.exports = { registrar, autenticar, confirmar, olvidePassword, comprobarToken, nuevoPassword, perfil }

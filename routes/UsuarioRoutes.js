@@ -11,5 +11,4 @@ router.route('/olvide-password/:token').get(comprobarToken).post(nuevoPassword);
 
 router.get('/perfil', checkAuth, perfil);
 
-
 module.exports = router;
