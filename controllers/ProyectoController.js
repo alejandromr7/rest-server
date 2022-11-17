@@ -68,7 +68,32 @@ const editarProyecto = async (req, res) => {
     }
 }
 
-const eliminarProyecto = async (req, res) => { }
+const eliminarProyecto = async (req, res) => {
+    const { id } = req.params;
+
+    const proyecto = await Proyecto.findByPk(id);
+
+    if (!proyecto) {
+        const error = new Error('Proyecto no encontrado');
+        return res.status(401).json({ msg: error.message, error: true });
+
+    }
+
+    if (proyecto.usuarioId !== req.usuario.id) {
+        const error = new Error('No tienes los permisos para acceder a este proyecto');
+        return res.status(401).json({ msg: error.message, error: true });
+    }
+
+
+    try {
+        await Proyecto.destroy({ where: { id } });
+        res.json({ msg: `El proyecto ${id} ha sido eliminado correctamente`, error: true });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 const agregarColaborador = async (req, res) => { }
 const eliminarColaborador = async (req, res) => { }
 const obtenerTareas = async (req, res) => { }
