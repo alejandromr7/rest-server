@@ -17,6 +17,8 @@ const Proyecto = db.define('proyectos', {
         defaultValue: fechaActual()
     },
 
+    creador: Sequelize.STRING,
+
 });
 
 Usuario.hasMany(Proyecto);
