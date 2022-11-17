@@ -33,6 +33,7 @@ class Server {
 
     routes() {
         this.app.use('/api/usuarios', require('./routes/UsuarioRoutes'));
+        this.app.use('/api/proyectos', require('./routes/ProyectoRoutes'));
     }
 
     listen() {
