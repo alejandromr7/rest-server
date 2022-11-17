@@ -30,8 +30,7 @@ const obtenerProyecto = async (req, res) => {
 const nuevoProyecto = async (req, res) => {
     const proyecto = req.body;
     proyecto.usuarioId = req.usuario.id;
-    proyecto.creador = req.usuario.nombre;
-    console.log(proyecto);
+
     try {
         const proyectoAlmacenado = await Proyecto.create(proyecto);
         res.json(proyectoAlmacenado);
@@ -40,7 +39,35 @@ const nuevoProyecto = async (req, res) => {
     }
 }
 
-const editarProyecto = async (req, res) => { }
+const editarProyecto = async (req, res) => {
+    const { id } = req.params;
+
+    const proyecto = await Proyecto.findByPk(id);
+
+    if (!proyecto) {
+        const error = new Error('Proyecto no encontrado');
+        return res.status(401).json({ msg: error.message, error: true });
+
+    }
+
+    if (proyecto.usuarioId !== req.usuario.id) {
+        const error = new Error('No tienes los permisos para acceder a este proyecto');
+        return res.status(401).json({ msg: error.message, error: true });
+    }
+
+
+    try {
+        proyecto.nombre = req.body.nombre || proyecto.nombre;
+        proyecto.descripcion = req.body.descripcion || proyecto.descripcion;
+        proyecto.cliente = req.body.cliente || proyecto.cliente;
+        const proyectoAlmacenado = await proyecto.save();
+        console.log(proyectoAlmacenado);
+        res.json(proyectoAlmacenado);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const eliminarProyecto = async (req, res) => { }
 const agregarColaborador = async (req, res) => { }
 const eliminarColaborador = async (req, res) => { }

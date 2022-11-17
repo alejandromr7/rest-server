@@ -4,21 +4,26 @@ const fechaActual = require('../helpers/fecha');
 const Usuario = require('./Usuario');
 
 const Proyecto = db.define('proyectos', {
+
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
 
-    nombre: Sequelize.STRING,
+    nombre: {
+        type: Sequelize.STRING,
+        require: true
+    },
+
     descripcion: Sequelize.STRING,
-    fecha: {
+
+    fechaEntrega: {
         type: Sequelize.STRING,
         defaultValue: fechaActual()
     },
 
-    creador: Sequelize.STRING,
-
+    cliente: Sequelize.STRING
 });
 
 Usuario.hasMany(Proyecto);
