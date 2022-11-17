@@ -17,6 +17,7 @@ class Server {
     async dbConnection() {
         try {
             require('./models/Usuario');
+            require('./models/Proyecto');
             await db.sync();
             console.log('Connection has been established successfully.');
         } catch (error) {
