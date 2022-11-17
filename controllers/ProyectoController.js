@@ -9,7 +9,22 @@ const obtenerProyectos = async (req, res) => {
 }
 
 const obtenerProyecto = async (req, res) => {
+    const { id } = req.params;
 
+    const proyecto = await Proyecto.findByPk(id);
+
+    if (!proyecto) {
+        const error = new Error('Proyecto no encontrado');
+        return res.status(401).json({ msg: error.message, error: true });
+
+    }
+
+    if (proyecto.usuarioId !== req.usuario.id) {
+        const error = new Error('No tienes los permisos para acceder a este proyecto');
+        return res.status(401).json({ msg: error.message, error: true });
+    }
+
+    res.json(proyecto)
 }
 
 const nuevoProyecto = async (req, res) => {

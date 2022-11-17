@@ -4,7 +4,7 @@ const { obtenerProyectos, obtenerProyecto, nuevoProyecto, editarProyecto, elimin
 const checkAuth = require('../middlewares/checkAuth');
 
 router.route('/').get(checkAuth, obtenerProyectos).post(checkAuth, nuevoProyecto);
-router.route('/id').get(checkAuth, obtenerProyecto).put(checkAuth, editarProyecto).delete(checkAuth, eliminarProyecto);
+router.route('/:id').get(checkAuth, obtenerProyecto).put(checkAuth, editarProyecto).delete(checkAuth, eliminarProyecto);
 
 
 router.get('/tareas/:id', checkAuth, obtenerTareas);
