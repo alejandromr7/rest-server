@@ -18,6 +18,7 @@ class Server {
         try {
             require('./models/Usuario');
             require('./models/Proyecto');
+            require('./models/Tarea');
             await db.sync();
             console.log('Connection has been established successfully.');
         } catch (error) {
