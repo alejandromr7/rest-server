@@ -30,7 +30,7 @@ const Tarea = db.define('tareas', {
     prioridad: Sequelize.STRING,
 });
 
-
+//Tarea.belongsTo(Proyecto)
 Proyecto.hasMany(Tarea);
 
 module.exports = Tarea;

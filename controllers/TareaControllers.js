@@ -1,7 +1,6 @@
 const db = require("../db/config");
 const Proyecto = require("../models/Proyecto");
 const Tarea = require("../models/Tarea");
-const Usuario = require("../models/Usuario");
 
 
 const agregarTarea = async (req, res) => {
@@ -104,5 +103,14 @@ const eliminarTarea = async (req, res) => {
 const cambiarEstado = async (req, res) => {
 
 }
+
+const agregarColaborador = async (req, res) => {
+
+}
+
+const eliminarColaborador = async (req, res) => {
+
+}
+
 
 module.exports = { agregarTarea, obtenerTarea, actualizarTarea, eliminarTarea, cambiarEstado }
