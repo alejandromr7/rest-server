@@ -1,5 +1,7 @@
+const db = require("../db/config");
 const Proyecto = require("../models/Proyecto");
 const Tarea = require("../models/Tarea");
+const Usuario = require("../models/Usuario");
 
 
 const agregarTarea = async (req, res) => {
@@ -26,7 +28,23 @@ const agregarTarea = async (req, res) => {
 }
 
 const obtenerTarea = async (req, res) => {
+    const { id } = req.params;
+    const [[tarea]] = await db.query(
+        `SELECT * FROM tareas INNER JOIN proyectos ON proyectos.id=tareas.proyectoId WHERE tareas.id=${id}`
+    );
 
+    if (!tarea) {
+        const error = new Error('No existe esta tarea');
+        return res.status(404).json({ msg: error.message });
+    }
+
+    console.log(tarea.usuarioId, req.usuario.id);
+    if (tarea.usuarioId !== req.usuario.id) {
+        const error = new Error('Accion no valida');
+        return res.status(403).json({ msg: error.message });
+    }
+
+    res.json(tarea);
 }
 
 const actualizarTarea = async (req, res) => {
